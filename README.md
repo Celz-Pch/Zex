@@ -1,7 +1,7 @@
 # Zex
 
 <p align="center">
-  <img src="./logo/zex_final.png" alt="zexZ" width="150" />
+  <img src="./logo/zex_final.png" alt="zexZ" width="150" height="150" />
 </p>
 
 ## Présentation
