@@ -1,4 +1,4 @@
 # Zex
 
-![zexZ](./zexZ.png)
+![zexZ](./logo/zexZ.png)
 

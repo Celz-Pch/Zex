@@ -22,13 +22,12 @@ void main_loop(void)
     coords_t *stock = init_struct();
 
     while ((stock->ch = getch()) != 'q') {
-        if (handle_backspace(stock))
+        if (manage_backspace(stock))
             continue;
-        if (handle_enter(stock))
+        if (manage_enter(stock))
             continue;
         if (arrow_manager(stock))
             continue;
-
         move(stock->y, stock->x);
         addch(stock->ch);
         refresh();
