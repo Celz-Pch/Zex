@@ -1,4 +1,4 @@
 # Zex
 
-![zexZ](./logo/zexZ.png)
+<img src="./logo/zexZ.png" alt="zexZ" width="150" />
 
