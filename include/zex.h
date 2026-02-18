@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <locale.h>
 #include <sys/stat.h>
 #include <dirent.h>
 
@@ -25,9 +26,11 @@
 #define ZP_TREE_DIR 7
 #define ZP_TREE_SEL 8
 #define ZP_STATUS 9
-#define ZP_TREE_HDR 10
+#define ZP_TREE_HDR  10
+#define ZP_TREE_CONN 11
+#define ZP_TREE_OPEN 12
 
-#define TREE_WIDTH 26
+#define TREE_WIDTH 30
 
 typedef enum {
     FOCUS_TREE,
