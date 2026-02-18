@@ -1,5 +1,5 @@
 /*
-** EPITECH PROJECT, 2026
+** Cz PROJECT, 2026
 ** zex
 ** File description:
 ** zex
