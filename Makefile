@@ -18,7 +18,7 @@ NAME = zex
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lncurses
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lncursesw
 	rm -f $(OBJ)
 
 clean:

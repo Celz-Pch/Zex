@@ -32,6 +32,7 @@ int main(int argc, char **argv)
 
     if (argc != 2)
         return 84;
+    setlocale(LC_ALL, "");
     setup_ncurses();
     ed = open_editor(argv[1]);
     if (!ed) {
