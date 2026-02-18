@@ -1,6 +1,6 @@
 ##
-## EPITECH PROJECT, 2025
-## ~/epitech/delivery
+## Cz PROJECT, 2025
+## ~/Cz/delivery
 ## File description:
 ## Makefile
 ##
@@ -33,3 +33,9 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+install: all
+	install -m 755 $(NAME) /usr/local/bin/$(NAME)
+
+uninstall:
+	rm -f /usr/local/bin/$(NAME)
