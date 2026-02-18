@@ -1,38 +1,45 @@
 /*
-** EPITECH PROJECT, 2026
-** key_handlers
+** Cz PROJECT, 2026
+** key_manage
 ** File description:
-** backspace and enter handlers
+** character, backspace and enter key handlers
 */
 
 #include "zex.h"
 
-int manage_backspace(coords_t *stock)
+int manage_char(editor_t *ed)
 {
-    if (!(stock->ch == KEY_BACKSPACE || stock->ch == 263 || stock->ch == 127 || stock->ch == 8))
+    int abs_line = ed->top_line + ed->y;
+
+    if (ed->ch < 32 || ed->ch > 126)
         return 0;
-    if (stock->x > 0) {
-        stock->x--;
-        move(stock->y, stock->x);
-        delch();
-        refresh();
-    } else if (stock->y > 0) {
-        stock->y--;
-        stock->x = COLS > 0 ? COLS - 1 : 0;
-        move(stock->y, stock->x);
-        delch();
-        refresh();
-    }
+    ed->lines[abs_line] = line_insert_char(ed->lines[abs_line],
+        ed->x, ed->ch);
+    ed->x++;
+    ed->modified = 1;
+    display_all(ed);
     return 1;
 }
 
-int manage_enter(coords_t *stock)
+int manage_backspace(editor_t *ed)
 {
-    if (!(stock->ch == 10 || stock->ch == KEY_ENTER))
+    if (!(ed->ch == KEY_BACKSPACE || ed->ch == 263
+        || ed->ch == 127 || ed->ch == 8))
         return 0;
-    stock->y++;
-    stock->x = 0;
-    move(stock->y, stock->x);
-    refresh();
+    if (ed->x > 0)
+        backspace_in_line(ed);
+    else if (ed->top_line + ed->y > 0)
+        backspace_merge(ed);
+    display_all(ed);
+    return 1;
+}
+
+int manage_enter(editor_t *ed)
+{
+    if (!(ed->ch == 10 || ed->ch == KEY_ENTER))
+        return 0;
+    enter_split_line(ed);
+    enter_move_cursor(ed);
+    display_all(ed);
     return 1;
 }

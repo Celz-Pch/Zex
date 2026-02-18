@@ -1,34 +1,21 @@
 /*
-** EPITECH PROJECT, 2026
-** key_manager
+** Cz PROJECT, 2026
+** arrow_manager
 ** File description:
-** key_manager
+** arrow key dispatcher
 */
 
 #include "zex.h"
 
-int arrow_manager(coords_t *stock)
+int arrow_manager(editor_t *ed)
 {
-    if (stock->ch == KEY_LEFT) {
-        if (stock->x > 0) stock->x--;
-        move(stock->y, stock->x);
-        refresh();
-        return 1;
-    } else if (stock->ch == KEY_RIGHT) {
-        if (stock->x < COLS - 1) stock->x++;
-        move(stock->y, stock->x);
-        refresh();
-        return 1;
-    } else if (stock->ch == KEY_UP) {
-        if (stock->y > 0) stock->y--;
-        move(stock->y, stock->x);
-        refresh();
-        return 1;
-    } else if (stock->ch == KEY_DOWN) {
-        stock->y++;
-        move(stock->y, stock->x);
-        refresh();
-        return 1;
-    }
+    if (ed->ch == KEY_LEFT)
+        return arrow_left(ed);
+    if (ed->ch == KEY_RIGHT)
+        return arrow_right(ed);
+    if (ed->ch == KEY_UP)
+        return arrow_up(ed);
+    if (ed->ch == KEY_DOWN)
+        return arrow_down(ed);
     return 0;
 }
