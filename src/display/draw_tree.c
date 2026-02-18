@@ -7,63 +7,113 @@
 
 #include "zex.h"
 
+static int continues_at_depth(editor_t *ed, int idx, int d)
+{
+    int i;
+
+    for (i = idx + 1; i < ed->tree_count; i++) {
+        if (ed->tree_entries[i]->depth < d)
+            return 0;
+        if (ed->tree_entries[i]->depth == d)
+            return 1;
+    }
+    return 0;
+}
+
 static void draw_tree_header(editor_t *ed)
 {
+    const char *root = ed->tree_root_path;
+    const char *name;
+    char buf[TREE_WIDTH + 1];
+
+    name = strrchr(root, '/');
+    name = (name && name[1]) ? name + 1 : root;
+    snprintf(buf, sizeof(buf), " %s", name);
     wattron(ed->tree_win, COLOR_PAIR(ZP_TREE_HDR) | A_BOLD);
-    mvwprintw(ed->tree_win, 0, 0, "%-*s", TREE_WIDTH, " EXPLORER");
+    mvwprintw(ed->tree_win, 0, 0, "%-*s", TREE_WIDTH, buf);
     wattroff(ed->tree_win, COLOR_PAIR(ZP_TREE_HDR) | A_BOLD);
 }
 
-static void format_entry_display(tree_entry_t *entry, char *display, int size)
-{
-    int indent = entry->depth * 2;
-
-    memset(display, ' ', indent);
-    display[indent] = '\0';
-    if (entry->is_dir)
-        snprintf(display + indent, size - indent,
-            "%s %s/", entry->expanded ? "v" : ">", entry->name);
-    else
-        snprintf(display + indent, size - indent, "  %s", entry->name);
-}
-
-static void apply_entry_color(editor_t *ed, int idx, int row,
-    const char *display)
+static void draw_connectors(editor_t *ed, int idx)
 {
     tree_entry_t *entry = ed->tree_entries[idx];
+    int d = entry->depth;
+    int selected = (idx == ed->tree_selected);
+    int conn_attr;
+    int l;
 
-    if (idx == ed->tree_selected) {
-        wattron(ed->tree_win, COLOR_PAIR(ZP_TREE_SEL) | A_BOLD);
-        mvwprintw(ed->tree_win, row, 0, "%-*s", TREE_WIDTH, display);
-        wattroff(ed->tree_win, COLOR_PAIR(ZP_TREE_SEL) | A_BOLD);
-    } else if (entry->is_dir) {
-        wattron(ed->tree_win, COLOR_PAIR(ZP_TREE_DIR) | A_BOLD);
-        mvwprintw(ed->tree_win, row, 0, "%-*s", TREE_WIDTH, display);
-        wattroff(ed->tree_win, COLOR_PAIR(ZP_TREE_DIR) | A_BOLD);
-    } else if (ed->filename && strcmp(ed->filename, entry->path) == 0) {
-        wattron(ed->tree_win, COLOR_PAIR(ZP_NORMAL) | A_UNDERLINE);
-        mvwprintw(ed->tree_win, row, 0, "%-*s", TREE_WIDTH, display);
-        wattroff(ed->tree_win, COLOR_PAIR(ZP_NORMAL) | A_UNDERLINE);
-    } else {
-        wattron(ed->tree_win, COLOR_PAIR(ZP_NORMAL));
-        mvwprintw(ed->tree_win, row, 0, "%-*s", TREE_WIDTH, display);
-        wattroff(ed->tree_win, COLOR_PAIR(ZP_NORMAL));
+    conn_attr = selected ? (COLOR_PAIR(ZP_TREE_SEL) | A_BOLD)
+                         : (COLOR_PAIR(ZP_TREE_CONN) | A_DIM);
+    wattron(ed->tree_win, conn_attr);
+    waddch(ed->tree_win, ' ');
+    for (l = 0; l < d; l++) {
+        waddch(ed->tree_win, continues_at_depth(ed, idx, l) ? ACS_VLINE : ' ');
+        waddch(ed->tree_win, ' ');
+        waddch(ed->tree_win, ' ');
+        waddch(ed->tree_win, ' ');
     }
+    waddch(ed->tree_win, continues_at_depth(ed, idx, d) ? ACS_LTEE : ACS_LLCORNER);
+    waddch(ed->tree_win, ACS_HLINE);
+    waddch(ed->tree_win, ACS_HLINE);
+    waddch(ed->tree_win, ' ');
+    wattroff(ed->tree_win, conn_attr);
+}
+
+static void draw_entry_name(editor_t *ed, int idx)
+{
+    tree_entry_t *entry = ed->tree_entries[idx];
+    int selected = (idx == ed->tree_selected);
+    int is_open = (ed->filename && entry->path
+        && strcmp(ed->filename, entry->path) == 0);
+    int d = entry->depth;
+    int overhead = 1 + (d + 1) * 4 + 2;
+    int remaining = TREE_WIDTH - overhead;
+    int nlen;
+    int attr;
+
+    if (selected)
+        attr = COLOR_PAIR(ZP_TREE_SEL) | A_BOLD;
+    else if (entry->is_dir)
+        attr = COLOR_PAIR(ZP_TREE_DIR) | A_BOLD;
+    else if (is_open)
+        attr = COLOR_PAIR(ZP_TREE_OPEN) | A_BOLD;
+    else
+        attr = COLOR_PAIR(ZP_NORMAL);
+    wattron(ed->tree_win, attr);
+    waddstr(ed->tree_win, entry->is_dir
+        ? (entry->expanded ? "▾ " : "▸ ")
+        : "  ");
+    if (remaining > 0) {
+        nlen = (int)strlen(entry->name);
+        if (nlen > remaining)
+            waddnstr(ed->tree_win, entry->name, remaining);
+        else
+            waddstr(ed->tree_win, entry->name);
+    }
+    wattroff(ed->tree_win, attr);
 }
 
 static void draw_tree_entry(editor_t *ed, int row, int idx)
 {
-    char display[TREE_WIDTH + 1];
+    int selected = (idx == ed->tree_selected);
 
-    format_entry_display(ed->tree_entries[idx], display, sizeof(display));
-    apply_entry_color(ed, idx, row, display);
+    wmove(ed->tree_win, row, 0);
+    if (selected) {
+        wattron(ed->tree_win, COLOR_PAIR(ZP_TREE_SEL) | A_BOLD);
+        mvwhline(ed->tree_win, row, 0, ' ', TREE_WIDTH);
+        wattroff(ed->tree_win, COLOR_PAIR(ZP_TREE_SEL) | A_BOLD);
+        wmove(ed->tree_win, row, 0);
+    }
+    draw_connectors(ed, idx);
+    draw_entry_name(ed, idx);
 }
 
 static void draw_tree_body(editor_t *ed)
 {
     int visible = LINES - 2;
+    int i;
 
-    for (int i = 0; i < visible && ed->tree_top + i < ed->tree_count; i++)
+    for (i = 0; i < visible && ed->tree_top + i < ed->tree_count; i++)
         draw_tree_entry(ed, i + 1, ed->tree_top + i);
 }
 

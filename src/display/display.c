@@ -12,16 +12,18 @@ void init_colors(void)
     if (!has_colors())
         return;
     use_default_colors();
-    init_pair(ZP_NORMAL,   COLOR_WHITE,   COLOR_BLACK);
-    init_pair(ZP_KEYWORD,  COLOR_CYAN,    COLOR_BLACK);
-    init_pair(ZP_STRING,   COLOR_GREEN,   COLOR_BLACK);
-    init_pair(ZP_COMMENT,  COLOR_WHITE,   COLOR_BLACK);
-    init_pair(ZP_NUMBER,   COLOR_YELLOW,  COLOR_BLACK);
-    init_pair(ZP_PREPROC,  COLOR_MAGENTA, COLOR_BLACK);
-    init_pair(ZP_TREE_DIR, COLOR_BLUE,    COLOR_BLACK);
-    init_pair(ZP_TREE_SEL, COLOR_BLACK,   COLOR_CYAN);
-    init_pair(ZP_STATUS,   COLOR_BLACK,   COLOR_WHITE);
-    init_pair(ZP_TREE_HDR, COLOR_WHITE,   COLOR_BLUE);
+    init_pair(ZP_NORMAL,    COLOR_WHITE,   -1);
+    init_pair(ZP_KEYWORD,   COLOR_CYAN,    -1);
+    init_pair(ZP_STRING,    COLOR_GREEN,   -1);
+    init_pair(ZP_COMMENT,   COLOR_WHITE,   -1);
+    init_pair(ZP_NUMBER,    COLOR_YELLOW,  -1);
+    init_pair(ZP_PREPROC,   COLOR_MAGENTA, -1);
+    init_pair(ZP_TREE_DIR,  COLOR_BLUE,    -1);
+    init_pair(ZP_TREE_SEL,  COLOR_WHITE,   COLOR_BLUE);
+    init_pair(ZP_STATUS,    COLOR_BLACK,   COLOR_WHITE);
+    init_pair(ZP_TREE_HDR,  COLOR_WHITE,   COLOR_BLUE);
+    init_pair(ZP_TREE_CONN, COLOR_WHITE,   -1);
+    init_pair(ZP_TREE_OPEN, COLOR_GREEN,   -1);
     bkgd(COLOR_PAIR(ZP_NORMAL));
 }
 
