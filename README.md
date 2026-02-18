@@ -90,5 +90,62 @@ L’éditeur évite de devenir un silo et favorise une utilisation fluide dans d
 
 ## En résumé
 
-Zex est un éditeur de texte conçu pour la **productivité**, la **clarté** et la **maîtrise du texte**.  
+Zex est un éditeur de texte conçu pour la **productivité**, la **clarté** et la **maîtrise du texte**.
 Il accompagne aussi bien le rédacteur ponctuel que le développeur exigeant, en offrant un outil rapide, expressif et durable.
+
+---
+
+## Installation
+
+### Dépendances
+
+```bash
+# Debian / Ubuntu
+sudo apt install clang libncurses-dev
+
+# Arch Linux
+sudo pacman -S clang ncurses
+
+# Fedora
+sudo dnf install clang ncurses-devel
+```
+
+### Compiler et installer
+
+```bash
+git clone https://github.com/<you>/zex
+cd zex
+make
+sudo make install
+```
+
+`zex` est maintenant disponible partout sur le système.
+
+### Désinstaller
+
+```bash
+sudo make uninstall
+```
+
+---
+
+## Utilisation
+
+```bash
+# Ouvrir un fichier
+zex fichier.c
+
+# Ouvrir un dossier (arborescence à gauche)
+zex mon_projet/
+```
+
+### Raccourcis
+
+| Touche | Action |
+|---|---|
+| `Ctrl+X` puis `Ctrl+S` | Sauvegarder |
+| `Ctrl+Q` | Quitter |
+| `Ctrl+W` | Basculer le focus arbre / éditeur |
+| Flèches | Déplacer le curseur |
+| `j` / `k` | Naviguer dans l'arbre (focus TREE) |
+| `Entrée` | Ouvrir un fichier / plier-déplier un dossier |
