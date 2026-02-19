@@ -62,13 +62,16 @@ void highlight_line(WINDOW *win, int row, const char *line, int max_cols)
     int i = 0;
     int col = 0;
     int len = strlen(line);
+    int first_char = 0;
 
     wmove(win, row, 0);
     wclrtoeol(win);
     if (len == 0)
         return;
     wmove(win, row, 0);
-    if (line[0] == '#') {
+    while (first_char < len && line[first_char] == ' ')
+        first_char++;
+    if (first_char < len && line[first_char] == '#') {
         emit(win, line, len > max_cols ? max_cols : len, ZP_PREPROC, A_BOLD);
         return;
     }

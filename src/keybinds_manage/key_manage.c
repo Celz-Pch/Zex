@@ -43,3 +43,19 @@ int manage_enter(editor_t *ed)
     display_all(ed);
     return 1;
 }
+
+int manage_tab(editor_t *ed)
+{
+    int abs_line = ed->top_line + ed->y;
+
+    if (ed->ch != 9)
+        return 0;
+    for (int i = 0; i < 4; i++) {
+        ed->lines[abs_line] = line_insert_char(ed->lines[abs_line],
+            ed->x, ' ');
+        ed->x++;
+    }
+    ed->modified = 1;
+    display_all(ed);
+    return 1;
+}

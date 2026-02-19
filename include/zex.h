@@ -97,6 +97,7 @@ int hl_identifier(WINDOW *win, const char *line, int *i, int *col, int len, int 
 int manage_char(editor_t *ed);
 int manage_backspace(editor_t *ed);
 int manage_enter(editor_t *ed);
+int manage_tab(editor_t *ed);
 void main_loop(editor_t *ed);
 int arrow_left(editor_t *ed);
 int arrow_right(editor_t *ed);

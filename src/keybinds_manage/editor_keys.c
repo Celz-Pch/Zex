@@ -28,6 +28,8 @@ void handle_editor_input(editor_t *ed)
         return;
     if (manage_enter(ed))
         return;
+    if (manage_tab(ed))
+        return;
     if (arrow_manager(ed))
         return;
     manage_char(ed);
