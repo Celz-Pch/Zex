@@ -44,6 +44,8 @@ void display_content(editor_t *ed)
             mvwaddch(win, row, 0, '~');
             wattroff(win, COLOR_PAIR(ZP_COMMENT) | A_DIM);
         }
+        if (line_idx == ed->top_line + ed->y)
+            completion_draw_inline(ed, row, edit_cols);
     }
 }
 

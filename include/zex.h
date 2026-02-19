@@ -66,6 +66,27 @@ typedef struct editor_s {
     int chord_active;
 } editor_t;
 
+typedef struct completion_ctx_s {
+    const char *prefix;
+    int prefix_len;
+    char *best;
+    int best_size;
+    int best_len;
+} completion_ctx_t;
+
+typedef struct prefix_info_s {
+    int start;
+    int len;
+} prefix_info_t;
+
+typedef struct completion_result_s {
+    prefix_info_t info;
+    char *best;
+    int best_size;
+    int best_len;
+} completion_result_t;
+
+
 editor_t *init_editor(char *file_path, char *dir_path);
 void editor_open_file(editor_t *ed, const char *path);
 int save_file(editor_t *ed);
@@ -88,12 +109,16 @@ void draw_tree(editor_t *ed);
 void draw_status_bar(editor_t *ed);
 void emit(WINDOW *win, const char *s, int len, int pair, int attr);
 int is_keyword(const char *word, int len);
+const char **get_c_keywords(void);
 void highlight_line(WINDOW *win, int row, const char *line, int max_cols);
 int hl_comment_line(WINDOW *win, const char *line, int *i, int *col, int len, int max);
 int hl_block_comment(WINDOW *win, const char *line, int *i, int *col, int len, int max);
 int hl_string_lit(WINDOW *win, const char *line, int *i, int *col, int len, int max, char delim);
 int hl_number(WINDOW *win, const char *line, int *i, int *col, int len, int max);
 int hl_identifier(WINDOW *win, const char *line, int *i, int *col, int len, int max);
+int completion_get_suffix(editor_t *ed, char *out, int out_size);
+int completion_apply(editor_t *ed);
+void completion_draw_inline(editor_t *ed, int row, int max_cols);
 int manage_char(editor_t *ed);
 int manage_backspace(editor_t *ed);
 int manage_enter(editor_t *ed);
