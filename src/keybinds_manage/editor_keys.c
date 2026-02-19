@@ -32,3 +32,12 @@ void handle_editor_input(editor_t *ed)
         return;
     manage_char(ed);
 }
+
+int confirm_exit(editor_t *ed)
+{
+    int choice = prompt("Are you sure you want to exit? Unsaved changes will be lost.", ed);
+
+    if (choice == 1)
+        return -1;
+    return 1;
+}

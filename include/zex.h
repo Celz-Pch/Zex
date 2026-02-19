@@ -112,5 +112,7 @@ void enter_move_cursor(editor_t *ed);
 void handle_chord(editor_t *ed);
 void handle_focus_switch(editor_t *ed);
 void handle_editor_input(editor_t *ed);
+int confirm_exit(editor_t *ed);
+int prompt(const char *message, editor_t *ed);
 
 #endif

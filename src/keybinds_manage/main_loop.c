@@ -28,7 +28,7 @@ static void handle_tree_key(editor_t *ed)
 static int handle_global_keys(editor_t *ed)
 {
     if (ed->ch == 17)
-        return -1;
+        return confirm_exit(ed);
     if (ed->ch == 23 && ed->has_tree) {
         handle_focus_switch(ed);
         return 1;
