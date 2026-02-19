@@ -28,7 +28,21 @@ void handle_editor_input(editor_t *ed)
         return;
     if (manage_enter(ed))
         return;
+    if (manage_tab(ed))
+        return;
     if (arrow_manager(ed))
         return;
     manage_char(ed);
+}
+
+int confirm_exit(editor_t *ed)
+{
+    int choice = 0;
+    
+    if (!ed->modified)
+        return -1;
+    choice = prompt("Are you sure you want to exit? Unsaved changes will be lost.", ed);
+    if (choice == 1)
+        return -1;
+    return 1;
 }
