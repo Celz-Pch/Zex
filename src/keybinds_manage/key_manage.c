@@ -50,6 +50,10 @@ int manage_tab(editor_t *ed)
 
     if (ed->ch != 9)
         return 0;
+    if (completion_apply(ed)) {
+        display_all(ed);
+        return 1;
+    }
     for (int i = 0; i < 4; i++) {
         ed->lines[abs_line] = line_insert_char(ed->lines[abs_line],
             ed->x, ' ');

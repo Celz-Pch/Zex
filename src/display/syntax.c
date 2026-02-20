@@ -27,6 +27,11 @@ int is_keyword(const char *word, int len)
     return 0;
 }
 
+const char **get_c_keywords(void)
+{
+    return C_KEYWORDS;
+}
+
 void emit(WINDOW *win, const char *s, int len, int pair, int attr)
 {
     wattron(win, COLOR_PAIR(pair) | attr);
