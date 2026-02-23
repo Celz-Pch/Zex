@@ -13,6 +13,7 @@ editor_t *init_editor(char *file_path, char *dir_path)
 
     if (!ed)
         return NULL;
+    ed->discord_fd = -1;
     init_editor_windows(ed, dir_path);
     init_editor_tree_state(ed, dir_path);
     init_editor_content(ed, file_path);
@@ -34,6 +35,7 @@ void editor_open_file(editor_t *ed, const char *path)
     ed->top_line = 0;
     ed->modified = 0;
     load_file(ed, path);
+    discord_update(ed);
 }
 
 int save_file(editor_t *ed)
