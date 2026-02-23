@@ -13,6 +13,7 @@
 #include <locale.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <unistd.h>
 
 #ifndef ZEX_H
     #define ZEX_H
@@ -64,6 +65,8 @@ typedef struct editor_s {
     char *tree_root_path;
     focus_t focus;
     int chord_active;
+    int discord_fd;
+    long discord_start;
 } editor_t;
 
 typedef struct completion_ctx_s {
@@ -140,5 +143,8 @@ void handle_focus_switch(editor_t *ed);
 void handle_editor_input(editor_t *ed);
 int confirm_exit(editor_t *ed);
 int prompt(const char *message, editor_t *ed);
+void discord_init(editor_t *ed);
+void discord_update(editor_t *ed);
+void discord_shutdown(editor_t *ed);
 
 #endif

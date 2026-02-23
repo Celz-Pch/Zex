@@ -39,7 +39,10 @@ int main(int argc, char **argv)
         endwin();
         return 84;
     }
+    discord_init(ed);
+    discord_update(ed);
     main_loop(ed);
+    discord_shutdown(ed);
     free_editor(ed);
     endwin();
     return 0;
